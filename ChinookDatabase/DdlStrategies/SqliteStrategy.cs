@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Metadata.Edm;
+using System.Linq;
 using Microsoft.Data.Entity.Design.DatabaseGeneration;
 
 namespace ChinookDatabase.DdlStrategies
@@ -8,14 +9,11 @@ namespace ChinookDatabase.DdlStrategies
     {
         public SqliteStrategy()
         {
+            Name = "Sqlite";
+            DatabaseFileExtension = "sqlite";
+            Identity = "PRIMARY KEY AUTOINCREMENT";
+            ForeignKeyDef = KeyDefinition.OnCreateTableBottom;
             CommandLineFormat = "sqlite3 -init {0} {0}ite";
-        }
-
-        public override string Name { get { return "Sqlite"; } }
-
-        public override bool CreateForeignKeyOnTableCreate
-        {
-            get { return true; }
         }
 
         public override string FormatStringValue(string value)
@@ -32,6 +30,24 @@ namespace ChinookDatabase.DdlStrategies
         public override string GetFullyQualifiedName(string schema, string name)
         {
             return FormatName(name);
+        }
+
+        public override string GetStoreType(EdmProperty property)
+        {
+            if (property.TypeUsage.EdmType.Name == "int")
+                return "INTEGER";
+
+            return base.GetStoreType(property);
+        }
+
+        public override string WriteCreateColumn(EdmProperty property, Version targetVersion)
+        {
+            var notnull = (property.Nullable ? "" : "NOT NULL");
+            var identity = GetIdentity(property, targetVersion);
+            return string.Format("{0} {1} {2} {3}",
+                                 FormatName(property.Name),
+                                 GetStoreType(property),
+                                 identity, notnull).Trim();
         }
 
         public override string WriteDropTable(EntitySet entitySet)

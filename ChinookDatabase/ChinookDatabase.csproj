@@ -42,6 +42,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -53,6 +54,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Data.Entity.CTP, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Data.Entity.Design.DatabaseGeneration">
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\Microsoft.Data.Entity.Design.DatabaseGeneration.dll</HintPath>
     </Reference>
@@ -61,6 +63,7 @@
       <HintPath>..\Lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -83,6 +86,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Chinook.edmx</DependentUpon>
     </Compile>
+    <Compile Include="DataModel\Album.cs" />
+    <Compile Include="DataModel\Artist.cs" />
+    <Compile Include="DataModel\ChinookModel.cs" />
+    <Compile Include="DataModel\Customer.cs" />
+    <Compile Include="DataModel\Employee.cs" />
+    <Compile Include="DataModel\Genre.cs" />
+    <Compile Include="DataModel\Invoice.cs" />
+    <Compile Include="DataModel\InvoiceLine.cs" />
+    <Compile Include="DataModel\MediaType.cs" />
+    <Compile Include="DataModel\Playlist.cs" />
+    <Compile Include="DataModel\PlaylistTrack.cs" />
+    <Compile Include="DataModel\Track.cs" />
     <Compile Include="DataSources\_Xml\Schema\ChinookDataSet.cs">
       <DependentUpon>ChinookDataSet.xsd</DependentUpon>
       <SubType>Component</SubType>
@@ -95,6 +110,7 @@
     <Compile Include="DdlStrategies\AbstractDdlStrategy.cs" />
     <Compile Include="DdlStrategies\EffiProzStrategy.cs" />
     <Compile Include="DdlStrategies\OracleStrategy.cs" />
+    <Compile Include="DdlStrategies\KeyDefinition.cs" />
     <Compile Include="DdlStrategies\SqliteStrategy.cs" />
     <Compile Include="DdlStrategies\SqlServerCompactStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -116,6 +132,11 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ChinookDatabase.txt</LastGenOutput>
     </None>
+    <Content Include="DataSources\ChinookDatabase.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChinookDatabase.tt</DependentUpon>
+    </Content>
     <Content Include="DataSources\Chinook_EffiProz_AutoIncrementPKs.sql">
       <DependentUpon>ChinookDatabase.tt</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -126,6 +147,9 @@
     </Content>
     <Content Include="DataSources\Chinook_Sqlite.sqlite">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataSources\Chinook_Sqlite_AutoIncrementPKs.sql">
+      <DependentUpon>ChinookDatabase.tt</DependentUpon>
     </Content>
     <Content Include="DataSources\Chinook_SqlServerCompact.sqlce">
       <DependentUpon>ChinookDatabase.tt</DependentUpon>
@@ -151,7 +175,14 @@
       <DependentUpon>ChinookDatabase.tt</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="DataSources\Chinook_Sqlite_AutoIncrementPKs.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="DataSources\CreateAll.bat" />
+    <None Include="DataSources\Package.bat">
+      <DependentUpon>ChinookDatabase.tt</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="DataSources\_Xml\ChinookData.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ChinookData.xml</LastGenOutput>
@@ -183,11 +214,6 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DataSources\ChinookDatabase.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ChinookDatabase.tt</DependentUpon>
-    </None>
     <Content Include="DataSources\Chinook_EffiProz.sql">
       <DependentUpon>ChinookDatabase.tt</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
